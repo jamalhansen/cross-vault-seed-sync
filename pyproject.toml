@@ -8,12 +8,16 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "local-first-common",
     "python-frontmatter>=1.1.0",
     "typer>=0.24.1",
 ]
 
 [project.scripts]
 seed-sync = "cross_vault_seed_sync.cli:app"
+
+[tool.uv.sources]
+local-first-common = { git = "https://github.com/jamalhansen/local-first-common.git", branch = "main" }
 
 [build-system]
 requires = ["hatchling"]

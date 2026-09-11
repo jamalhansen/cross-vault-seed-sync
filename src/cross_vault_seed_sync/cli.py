@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Annotated
 
 import typer
 
@@ -15,15 +16,14 @@ app = typer.Typer(
     add_completion=False,
 )
 
+_DEFAULT_CONTEXTA_PATH = Path.home() / "vaults" / "Contexta"
+_DEFAULT_BRAINSYNC_PATH = Path.home() / "vaults" / "BrainSync"
+
 
 @app.command()
 def check(
-    contexta_path: Path = typer.Option(
-        Path.home() / "vaults" / "Contexta", "--contexta-path"
-    ),
-    brainsync_path: Path = typer.Option(
-        Path.home() / "vaults" / "BrainSync", "--brainsync-path"
-    ),
+    contexta_path: Annotated[Path, typer.Option("--contexta-path")] = _DEFAULT_CONTEXTA_PATH,
+    brainsync_path: Annotated[Path, typer.Option("--brainsync-path")] = _DEFAULT_BRAINSYNC_PATH,
 ):
     """Check promoted-seed targets exist, and BrainSync source_note refs resolve."""
     seeds_dir = contexta_path / "seeds"
