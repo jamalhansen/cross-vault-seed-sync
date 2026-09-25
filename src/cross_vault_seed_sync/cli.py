@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
+from local_first_common.tracking import register_tool, timed_run
 
 from .checker import (
     check_orphans,
@@ -9,6 +10,8 @@ from .checker import (
     scan_promoted_seeds,
     scan_source_note_refs,
 )
+
+_TOOL = register_tool("cross-vault-seed-sync")
 
 app = typer.Typer(
     name="cross-vault-seed-sync",
@@ -32,11 +35,13 @@ def check(
     def _warn(path: Path, error: Exception) -> None:
         typer.echo(f"  [skipped] {path}: {error}", err=True)
 
-    seeds = scan_promoted_seeds(seeds_dir, on_error=_warn)
-    refs = scan_source_note_refs(brainsync_path, on_error=_warn)
+    with timed_run("cross-vault-seed-sync", None, source_location=str(contexta_path)) as run:
+        seeds = scan_promoted_seeds(seeds_dir, on_error=_warn)
+        refs = scan_source_note_refs(brainsync_path, on_error=_warn)
 
-    target_results = check_promoted_targets(seeds)
-    orphan_results = check_orphans(refs, notes_dir, seeds_dir)
+        target_results = check_promoted_targets(seeds)
+        orphan_results = check_orphans(refs, notes_dir, seeds_dir)
+        run.item_count = len(seeds) + len(refs)
 
     ok = [r for r in target_results if r.kind == "ok"]
     miss = [r for r in target_results if r.kind == "miss"]
