@@ -6,6 +6,7 @@ gets `status: promoted` and `promoted_to: <path>`; nothing previously
 verified the target actually exists, or that the BrainSync file at that
 target points back via `source_note`.
 """
+
 import os
 from dataclasses import dataclass
 from pathlib import Path
@@ -95,9 +96,7 @@ def check_promoted_targets(seeds: list[PromotedSeed]) -> list[CheckResult]:
     for seed in seeds:
         target = resolve_target(seed.promoted_to)
         if target.exists():
-            results.append(
-                CheckResult(kind="ok", seed_path=seed.path, brainsync_path=target, detail="")
-            )
+            results.append(CheckResult(kind="ok", seed_path=seed.path, brainsync_path=target, detail=""))
         else:
             results.append(
                 CheckResult(
@@ -110,9 +109,7 @@ def check_promoted_targets(seeds: list[PromotedSeed]) -> list[CheckResult]:
     return results
 
 
-def check_orphans(
-    refs: list[SourceNoteRef], notes_dir: Path, seeds_dir: Path
-) -> list[CheckResult]:
+def check_orphans(refs: list[SourceNoteRef], notes_dir: Path, seeds_dir: Path) -> list[CheckResult]:
     """ORPHAN if a BrainSync file's source_note doesn't match a real Contexta note or seed."""
     results = []
     for ref in refs:

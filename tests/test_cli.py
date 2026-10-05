@@ -28,9 +28,7 @@ class TestCheckCommand:
         _write(target, {"source_note": "s1"})
         _write(contexta / "seeds" / "s1.md", {"status": "promoted", "promoted_to": str(target)})
 
-        result = runner.invoke(
-            app, ["--contexta-path", str(contexta), "--brainsync-path", str(brainsync)]
-        )
+        result = runner.invoke(app, ["--contexta-path", str(contexta), "--brainsync-path", str(brainsync)])
         assert result.exit_code == 0
         assert "OK" in result.output
         assert "0 miss, 0 orphan" in result.output
@@ -48,9 +46,7 @@ class TestCheckCommand:
         )
         _write(brainsync / "orphan-post.md", {"source_note": "ghost"})
 
-        result = runner.invoke(
-            app, ["--contexta-path", str(contexta), "--brainsync-path", str(brainsync)]
-        )
+        result = runner.invoke(app, ["--contexta-path", str(contexta), "--brainsync-path", str(brainsync)])
         assert result.exit_code == 1
         assert "MISS" in result.output
         assert "ORPHAN" in result.output

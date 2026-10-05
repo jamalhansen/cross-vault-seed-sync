@@ -26,7 +26,7 @@ class TestResolveTarget:
 
     def test_strips_quotes(self):
         result = resolve_target('"~/vaults/BrainSync/x.md"')
-        assert "\"" not in str(result)
+        assert '"' not in str(result)
 
     def test_strips_whitespace(self):
         result = resolve_target("  ~/x.md  ")
