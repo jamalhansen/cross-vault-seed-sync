@@ -47,8 +47,10 @@ def check(
     miss = [r for r in target_results if r.kind == "miss"]
 
     for r in ok:
+        assert r.seed_path is not None  # ok and miss results always carry their seed; only orphans don't
         typer.echo(f"OK     {r.seed_path.name} -> {r.brainsync_path}")
     for r in miss:
+        assert r.seed_path is not None
         typer.echo(f"MISS   {r.seed_path.name}: {r.detail}")
     for r in orphan_results:
         typer.echo(f"ORPHAN {r.brainsync_path}: {r.detail}")
